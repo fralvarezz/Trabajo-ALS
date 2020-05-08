@@ -4,6 +4,7 @@
 import webapp2
 import time
 from model.usuario import Usuario
+from model.favorito import Favorito
 from webapp2_extras.users import users
 from webapp2_extras import jinja2
 
@@ -15,8 +16,13 @@ class DetalleRecetaHandler(webapp2.RequestHandler):
         if user:
             url_user = users.create_logout_url("/")
             receta = Receta.recupera(self.request)
+            listafavs = []
+            favoritos = Favorito.query(Favorito.usuario == user.user_id)
+            for favorito in favoritos:
+                listafavs.append(favorito.receta_id)
             valores_plantilla = {
-                "user":user,
+                "favoritos": listafavs,
+                "user" : user,
                 "url_user": url_user,
                 "receta": receta
             }
