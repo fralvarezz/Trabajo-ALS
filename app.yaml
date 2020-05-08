@@ -9,8 +9,42 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: .*
-  script: main.app
+- url: /
+  script: handlers.main.app
+
+- url: /recetas/nueva
+  script: handlers.recetas.nueva.app
+  login: required
+
+- url: /recetas/elimina
+  script: handlers.recetas.elimina.app
+
+- url: /recetas/modifica
+  script: handlers.recetas.modifica.app
+
+- url: /recetas/detalle
+  script: handlers.recetas.detalle.app
+  login: required
+
+- url: /recetas/mis_recetas
+  script: handlers.recetas.mis_recetas.app
+  login: required
+
+- url: /favoritos/add_favorito
+  script: handlers.favoritos.add_favorito.app
+  login: required
+
+- url: /favoritos/mis_favoritos
+  script: handlers.favoritos.mis_favoritos.app
+  login: required
+
+- url: /favoritos/elimina
+  script: handlers.favoritos.elimina.app
+  login: required
+
+- url: /imagen
+  script: handlers.Image.image.app
+
 
 libraries:
 - name: webapp2

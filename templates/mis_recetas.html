@@ -1,0 +1,43 @@
+{% extends "esqueleto.html" %}
+
+{% block contenido %}
+
+<h2>Mis recetas</h2>
+    <a href="/recetas/nueva" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Nueva receta</a>
+    <a href="/" class="btn btn-light"><i class="fas fa-utensils"></i>&nbsp;Recetas</a>
+    {% if user %}
+            <a href="/favoritos/mis_favoritos" class="btn btn-warning"><i class="fas fa-star"></i>&nbsp;Mis favoritos</a>
+    {% endif %}
+
+    {% if recetas.count() > 0 %}
+            <div class="card-columns">
+            {% for receta in recetas %}
+                    <div class="card">
+                        <img class="card-img-top" src="/imagen?id={{ receta.key.urlsafe() }}" alt="Imagen">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">
+                                <a href="/recetas/detalle?id={{ receta.key.urlsafe() }}">{{ receta.titulo }}</a>
+                            </h5>
+                            <p class="card-text">{{ receta.descripcion }}</p>
+                            <div class="mt-auto">
+                                {% if user.user_id == receta.usuario %}
+                                        <a href="/recetas/elimina?id={{ receta.key.urlsafe() }}" class="btn-sm btn-danger"><i class="fas fa-trash"></i>&nbsp;Eliminar</a>
+                                        <a href="/recetas/modifica?id={{ receta.key.urlsafe() }}" class="btn-sm btn-info"><i class="fas fa-edit"></i>&nbsp;Modificar</a>
+                                    {% endif %}
+                                    {% if user %}
+                                        {% if not receta.key.id() in favoritos %}
+                                            <a href="/favoritos/add_favorito?id={{ receta.key.urlsafe() }}" class="btn-sm btn-warning"><i class="far fa-star"></i>&nbsp;Favorito</a>
+                                        {% else %}
+                                            <a href="/favoritos/add_favorito?id={{ receta.key.urlsafe() }}" class="btn btn-warning btn-sm disabled" role="button" aria-disabled="true"><i class="fas fa-star"></i>&nbsp;Favorito</a>
+                                        {% endif %}
+                                    {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+            </div>
+    {% else %}
+        <p><b>No has creado ninguna receta todavía.</b></p>
+    {% endif %}
+
+{% endblock %}

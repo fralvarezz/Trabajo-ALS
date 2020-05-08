@@ -1,0 +1,55 @@
+{% extends "esqueleto.html" %}
+
+{% block contenido %}
+<h3>Modifica: {{ receta.titulo }}</h3>
+    <a href="/recetas/nueva" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Nueva receta</a>
+    <a href="/" class="btn btn-light"><i class="fas fa-utensils"></i>&nbsp;Recetas</a>
+    {% if user %}
+        <a href="/favoritos/mis_favoritos" class="btn btn-warning"><i class="fas fa-star"></i>&nbsp;Mis favoritos</a>
+        <a href="/recetas/mis_recetas" class="btn btn-info"><i class="fas fa-utensils"></i>&nbsp;Mis recetas</a>
+    {% endif %}
+<form id="frmModificaReceta"
+      method="post"
+      action="/recetas/modifica?id={{ receta.key.urlsafe() }}"
+      enctype="multipart/form-data"
+      onsubmit="return check()">
+
+    <div class="form-group">
+    <label for="edTitulo">Titulo</label>
+    <textarea class="form-control" id="edTitulo" name="edTitulo" rows="1">{{ receta.titulo }}</textarea>
+    </div>
+
+    <label for="edDescripcion">Descripcion</label>
+    <textarea class="form-control" id="edDescripcion" name="edDescripcion" rows="3">{{ receta.descripcion }}</textarea>
+
+    <label for="edPasos">Ingredientes y pasos</label>
+    <textarea class="form-control" id="edPasos" name="edPasos" rows="10">{{ receta.pasos }}</textarea>
+
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="edImagen" name="edImagen">
+        <label class="custom-file-label" for="edImagen">Sube una imagen si quieres cambiarla</label>
+    </div>
+
+    <p><button type="submit" class="btn btn-primary">Modificar</button></p>
+</form>
+
+<script>
+// Add the following code if you want the name of the file appear on select
+$(".custom-file-input").on("change", function() {
+  var fileName = $(this).val().split("\\").pop();
+  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+</script>
+
+<script>
+    function check() {
+        const edTitulo = document.getElementById("edTitulo");
+        const edDescripcion = document.getElementById("edDescripcion");
+        const edPasos = document.getElementById("edPasos");
+
+        return(edTitulo.value.trim().length > 0
+            && edDescripcion.value.trim().length > 0
+            && edPasos.value.trim().length > 0);
+    }
+</script>
+{% endblock %}

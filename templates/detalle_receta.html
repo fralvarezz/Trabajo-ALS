@@ -1,0 +1,35 @@
+{% extends "esqueleto.html" %}
+
+{% block contenido %}
+
+    <a href="/recetas/nueva" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp;Nueva receta</a>
+    <a href="/" class="btn btn-light"><i class="fas fa-utensils"></i>&nbsp;Recetas</a>
+    {% if user %}
+        <a href="/favoritos/mis_favoritos" class="btn btn-warning"><i class="fas fa-star"></i>&nbsp;Mis favoritos</a>
+        <a href="/recetas/mis_recetas" class="btn btn-info"><i class="fas fa-utensils"></i>&nbsp;Mis recetas</a>
+    {% endif %}
+<div class="card w-75 mx-auto">
+    <h4 class="card-header text-center">
+        {{ receta.titulo }}
+    </h4>
+    <div class="card-body">
+        <img class="card-img-top" src="/imagen?id={{ receta.key.urlsafe() }}" alt="Imagen">
+        <h5 class="card-title">{{ receta.descripcion }}</h5>
+        <p class="card-text">{{ receta.pasos }}</p>
+        <div class="mt-auto">
+            {% if user.user_id == receta.usuario %}
+                <a href="/recetas/elimina?id={{ receta.key.urlsafe() }}" class="btn-sm btn-danger"><i class="fas fa-trash"></i>&nbsp;Eliminar</a>
+                <a href="/recetas/modifica?id={{ receta.key.urlsafe() }}" class="btn-sm btn-info"><i class="fas fa-edit"></i>&nbsp;Modificar</a>
+            {% endif %}
+            {% if user %}
+                {% if not receta.key.id() in favoritos %}
+                    <a href="/favoritos/add_favorito?id={{ receta.key.urlsafe() }}" class="btn-sm btn-warning"><i class="far fa-star"></i>&nbsp;Favorito</a>
+                {% else %}
+                    <a href="/favoritos/add_favorito?id={{ receta.key.urlsafe() }}" class="btn btn-warning btn-sm disabled" role="button" aria-disabled="true"><i class="fas fa-star"></i>&nbsp;Favorito</a>
+                {% endif %}
+            {% endif %}
+        </div>
+  </div>
+</div>
+
+{% endblock %}
